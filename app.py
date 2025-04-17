@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, render_template, request, redirect, session, send_from_directory
 import pymysql
 import os
+from flask_session import Session
 
 app = Flask(__name__)
+
+# Configurações da sessão
+app.config['SECRET_KEY'] = 'chave-super-secreta'
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 UPLOAD_FOLDER = 'static/livros'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -14,15 +20,16 @@ def connect_to_db():
         user="root",
         password="1234567",
         database="biblioteca",
-        cursorclass=pymysql.cursors.Cursor  # opcional, mas mantém o cursor padrão
+        cursorclass=pymysql.cursors.Cursor
     )
 
 
 @app.route('/')
 def index():
-    print("iniciando...")
+    if 'usuario_id' not in session:
+        return redirect('/login')
+
     conn = connect_to_db()
-    print("Conectado")
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM livros")
     livros = cursor.fetchall()
@@ -32,6 +39,9 @@ def index():
 
 @app.route('/adicionar', methods=['GET', 'POST'])
 def adicionar():
+    if 'usuario_id' not in session:
+        return redirect('/login')
+
     if request.method == 'POST':
         titulo = request.form['titulo']
         descricao = request.form['descricao']
@@ -58,6 +68,9 @@ def adicionar():
 
 @app.route('/deletar/<int:id>', methods=['GET'])
 def deletar(id):
+    if 'usuario_id' not in session:
+        return redirect('/login')
+
     conn = connect_to_db()
     cursor = conn.cursor()
 
@@ -87,6 +100,65 @@ def ler_pdf(id):
         return send_from_directory(app.config['UPLOAD_FOLDER'], caminho_pdf)
     else:
         return "Livro não encontrado", 404
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        senha = request.form['senha']
+
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM usuarios WHERE username = %s AND senha = %s", (username, senha))
+        usuario = cursor.fetchone()
+        conn.close()
+
+        if usuario:
+            session['usuario_id'] = usuario[0]
+            session['username'] = usuario[1]
+            return redirect('/')
+        else:
+            return render_template('login.html', erro="Usuário ou senha inválidos", login_ativo=True, formulario_titulo="Login")
+
+    return render_template('login.html', login_ativo=True, formulario_titulo="Login")
+
+
+@app.route('/login/registro', methods=['GET', 'POST'])
+def registro():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        senha = request.form['senha']
+
+        # Verifica se o usuário já existe
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM usuarios WHERE username = %s", (username,))
+        usuario_existente = cursor.fetchone()
+
+        if usuario_existente:
+            return render_template('login.html', erro="Nome de usuário já existe.", login_ativo=False, formulario_titulo="Registrar")
+
+        # Adiciona o novo usuário no banco de dados
+        cursor.execute("""
+            INSERT INTO usuarios (username, email, senha) 
+            VALUES (%s, %s, %s)
+        """, (username, email, senha))
+        
+        conn.commit()
+        conn.close()
+
+        return redirect('/login')
+
+    return render_template('login.html', login_ativo=False, formulario_titulo="Registrar")
+
+
+# Rota de logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
 
 
 if __name__ == '__main__':

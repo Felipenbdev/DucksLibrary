@@ -23,7 +23,16 @@
                     <img src="{{ url_for('static', filename='icon.png') }}" alt="iconImg">
                 </div>
                 <div class="user-menu" id="userMenu">
-                    <a href="{{ url_for('adicionar') }}">Upar seu livro</a>
+                    {% if session['usuario_id'] %}
+                        <p>Bem-vindo, {{ session['username'] }}!</p>
+                        <a href="{{ url_for('adicionar') }}">Upar seu livro</a>
+                        <!-- Botão de logout -->
+                        <form action="{{ url_for('logout') }}" method="get">
+                            <button type="submit">Sair</button> <!-- Botão para sair -->
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </header>
