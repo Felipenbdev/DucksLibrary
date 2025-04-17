@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="site-name">Ducks Library</div>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do site">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="top-bar">
+            <div class="news-bar">Novidades Sobre as suas obras favoritas ❤️</div>
+            <div class="top-right">
+                <input type="text" placeholder="Pesquisar..." class="search-bar">
+                <div class="user-icon" onclick="toggleMenu()">
+                    <img src="{{ url_for('static', filename='icon.png') }}" alt="iconImg">
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <a href="{{ url_for('adicionar') }}">Upar seu livro</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="book-list">
+            <h2>Livros Cadastrados 📖</h2>
+            <div class="book-grid">
+                {% for livro in livros %}
+                    <div class="book-card">
+                        <h3>{{ livro[1] }}</h3>
+                        <p>{{ livro[2] }}</p>
+                        <div class="book-actions">
+                            <a href="{{ url_for('ler_pdf', id=livro[0]) }}" target="_blank">📖 Ler</a>
+                            <a href="{{ url_for('deletar', id=livro[0]) }}">🗑️ Deletar</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+
+        <footer class="footer">Ducks Code - Todos os direitos reservados</footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("userMenu").classList.toggle("show");
+        }
+    </script>
+
+</body>
+</html>

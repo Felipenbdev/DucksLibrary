@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Livro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="site-name">Ducks Library</div>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do site">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="top-bar">
+            <div class="news-bar">Adicionar um novo livro à coleção</div>
+            <div class="top-right">
+                <input type="text" placeholder="Pesquisar..." class="search-bar">
+                <div class="user-icon" onclick="toggleMenu()">
+                    <img src="{{ url_for('static', filename='icon.png') }}" alt="iconImg">
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <a href="{{ url_for('index') }}">Voltar para livros</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="book-form">
+            <h1>Adicionar Novo Livro</h1>
+
+            <form action="{{ url_for('adicionar') }}" method="POST" enctype="multipart/form-data">
+                <label for="titulo">Título:</label><br>
+                <input type="text" id="titulo" name="titulo" required><br><br>
+
+                <label for="descricao">Descrição:</label><br>
+                <textarea id="descricao" name="descricao" required></textarea><br><br>
+
+                <label for="pdf">PDF do Livro:</label><br>
+                <input type="file" id="pdf" name="pdf" accept=".pdf" required><br><br>
+
+                <button type="submit">Adicionar</button>
+            </form>
+        </main>
+
+        <footer class="footer">Ducks Code - Todos os direitos reservados</footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("userMenu").classList.toggle("show");
+        }
+    </script>
+
+</body>
+</html>
