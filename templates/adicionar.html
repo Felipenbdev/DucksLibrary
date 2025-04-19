@@ -28,14 +28,14 @@
         </header>
 
         <main class="book-form">
-            <h1>Adicionar Novo Livro</h1>
+            
 
             <form action="{{ url_for('adicionar') }}" method="POST" enctype="multipart/form-data">
-                <label for="titulo">Título:</label><br>
-                <input type="text" id="titulo" name="titulo" required><br><br>
+                <h1>Adicionar Novo Livro</h1>
+                
+                <input type="text" id="titulo" placeholder="titulo" name="titulo" required><br><br>
 
-                <label for="descricao">Descrição:</label><br>
-                <textarea id="descricao" name="descricao" required></textarea><br><br>
+                <textarea id="descricao" name="descricao" placeholder="descrição" required></textarea><br><br>
 
                 <label for="pdf">PDF do Livro:</label><br>
                 <input type="file" id="pdf" name="pdf" accept=".pdf" required><br><br>
