@@ -1,41 +1,65 @@
-<!-- templates/login.html -->
 <!DOCTYPE html>
-<html>
-<head><title>Login/Registro</title></head>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
-    <h1>{{ formulario_titulo }}</h1>
-    
-    {% if erro %}
-        <p style="color:red">{{ erro }}</p>
-    {% endif %}
-    
-    <form method="post">
-        <!-- Formulário de Login -->
-        {% if login_ativo %}
-            <label>Usuário:</label>
-            <input type="text" name="username" required><br><br>
-            
-            <label>Senha:</label>
-            <input type="password" name="senha" required><br><br>
-            
-            <button type="submit">Entrar</button><br><br>
-            <p>Não tem uma conta? <a href="/login/registro">Clique aqui para se registrar</a></p>
-        {% endif %}
+    <div class="login-content">
 
-        <!-- Formulário de Registro -->
-        {% if not login_ativo %}
-            <label>Usuário:</label>
-            <input type="text" name="username" required><br><br>
+        <!-- Header com logo e texto -->
+        <div class="form-header">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="form-logo">
+            <h1 class="form-title">Ducks Code</h1>
+        </div>
+
+        <div class="auth-container">
             
-            <label>Email:</label>
-            <input type="email" name="email" required><br><br>
-            
-            <label>Senha:</label>
-            <input type="password" name="senha" required><br><br>
-            
-            <button type="submit">Registrar</button><br><br>
-            <p>Já tem uma conta? <a href="/login">Clique aqui para fazer login</a></p>
-        {% endif %}
-    </form>
+
+            <div class="form-box">
+                <div class="form-top-bar"></div> <!-- Linha azul no topo -->
+
+                <h2>{{ formulario_titulo }}</h2>
+
+                {% if erro %}
+                    <p class="error-msg">{{ erro }}</p>
+                {% endif %}
+
+                <form method="post">
+                    {% if login_ativo %}
+                        <label>Usuário:</label>
+                        <input type="text" name="username" required>
+
+                        <label>Senha:</label>
+                        <input type="password" name="senha" required>
+
+                        <button type="submit">Entrar</button>
+
+                        <p class="form-switch">
+                            <span>Novo usuário?</span>
+                            <a href="/login/registro">Clique aqui para se registrar</a>
+                        </p>
+                    {% else %}
+                        <label>Usuário:</label>
+                        <input type="text" name="username" required>
+
+                        <label>Email:</label>
+                        <input type="email" name="email" required>
+
+                        <label>Senha:</label>
+                        <input type="password" name="senha" required>
+
+                        <button type="submit">Registrar</button>
+
+                        <p class="form-switch">
+                            <span>Já tem uma conta?</span>
+                            <a href="/login">Clique aqui para fazer login</a>
+                        </p>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

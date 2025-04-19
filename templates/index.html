@@ -18,17 +18,17 @@
         <header class="top-bar">
             <div class="news-bar">Novidades Sobre as suas obras favoritas ❤️</div>
             <div class="top-right">
-                <input type="text" placeholder="Pesquisar..." class="search-bar">
                 <div class="user-icon" onclick="toggleMenu()">
                     <img src="{{ url_for('static', filename='icon.png') }}" alt="iconImg">
                 </div>
                 <div class="user-menu" id="userMenu">
                     {% if session['usuario_id'] %}
-                        <p>Bem-vindo, {{ session['username'] }}!</p>
+                        <div class="user-name" id="userName">
+                            <p>Bem-vindo, {{ session['username'] }}!</p>
+                        </div>
                         <a href="{{ url_for('adicionar') }}">Upar seu livro</a>
-                        <!-- Botão de logout -->
                         <form action="{{ url_for('logout') }}" method="get">
-                            <button type="submit">Sair</button> <!-- Botão para sair -->
+                            <button type="submit">Sair</button>
                         </form>
                     {% else %}
                         <a href="{{ url_for('login') }}">Login</a>
