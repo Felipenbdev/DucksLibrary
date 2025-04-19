@@ -30,11 +30,11 @@
                     {% if login_ativo %}
 
                         
-                        <input type="text" placeholder="Usuário" required />
+                        <input type="text" placeholder="Usuário" name="username" required />
 
                     
                         
-                        <input type="password" placeholder="senha" required />
+                        <input type="password" placeholder="senha" name="senha" required />
 
                         <button type="submit">Entrar</button>
 
@@ -43,9 +43,9 @@
                             <a href="/login/registro">Clique aqui para se registrar</a>
                         </p>
                     {% else %}
-                        <input type="text" placeholder="Usuário" required>
-                        <input type="email" placeholder="Email" required>
-                        <input type="password" placeholder="Senha" required>
+                        <input type="text" placeholder="Usuário" name="username" required>
+                        <input type="email" placeholder="Email" name="email" required>
+                        <input type="password" placeholder="Senha" name="senha" required>
                         <button type="submit">Registrar</button>
                         <p class="form-switch">
                             <span>Já tem uma conta?</span>
