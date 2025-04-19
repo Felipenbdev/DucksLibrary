@@ -38,7 +38,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    margin-left: 120px;  /* Mesma largura da sidebar */
+    margin-left: 120px;  
 }
 
 .top-bar {
@@ -301,7 +301,7 @@ body {
 }
 
 .login-content {
-    background-image: url(pato.png);
+    background-image: url(background.png);
     background-size: cover;           /* Faz a imagem cobrir toda a tela */
     background-repeat: no-repeat;     /* Evita que a imagem se repita */
     background-position: center;
@@ -320,27 +320,18 @@ body {
 
 .form-box {
     margin-bottom: 120px;
-    background-color: #ffffffac;
+    background-color: #faedd9;
     padding: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    width: 30%;
-    height: 90%;
+    width: 400px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
+    border-radius: 12px;
 }
 
-.form-top-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 4px;
-    width: 100%;
-    background-color: #a0cfff; /* Azul claro */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-}
 
 .form-box h2 {
     text-align: center;
@@ -366,14 +357,14 @@ body {
 }
 
 .form-box input:focus {
-    border-color: #007BFF;
+    border-color: #cb9e66;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
     outline: none;
 }
 
 .form-box button {
     padding: 10px;
-    background-color: #007BFF;
+    background-color: #cb9e66;
     border: none;
     color: white;
     border-radius: 6px;
@@ -383,7 +374,7 @@ body {
 }
 
 .form-box button:hover {
-    background-color: #0056b3;
+    background-color: #cb9e66;
 }
 
 .form-switch {
@@ -398,7 +389,7 @@ body {
 }
 
 .form-switch a {
-    color: #007BFF;
+    color: #121213;
     text-decoration: none;
     font-weight: bold;
 }

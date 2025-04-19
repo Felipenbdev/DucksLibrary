@@ -18,7 +18,7 @@
             
 
             <div class="form-box">
-                <div class="form-top-bar"></div> <!-- Linha azul no topo -->
+                
 
                 <h2>{{ formulario_titulo }}</h2>
 
@@ -28,11 +28,13 @@
 
                 <form method="post">
                     {% if login_ativo %}
-                        <label>Usuário:</label>
-                        <input type="text" name="username" required>
 
-                        <label>Senha:</label>
-                        <input type="password" name="senha" required>
+                        
+                        <input type="text" placeholder="Usuário" required />
+
+                    
+                        
+                        <input type="password" placeholder="senha" required />
 
                         <button type="submit">Entrar</button>
 
@@ -41,17 +43,10 @@
                             <a href="/login/registro">Clique aqui para se registrar</a>
                         </p>
                     {% else %}
-                        <label>Usuário:</label>
-                        <input type="text" name="username" required>
-
-                        <label>Email:</label>
-                        <input type="email" name="email" required>
-
-                        <label>Senha:</label>
-                        <input type="password" name="senha" required>
-
+                        <input type="text" placeholder="Usuário" required>
+                        <input type="email" placeholder="Email" required>
+                        <input type="password" placeholder="Senha" required>
                         <button type="submit">Registrar</button>
-
                         <p class="form-switch">
                             <span>Já tem uma conta?</span>
                             <a href="/login">Clique aqui para fazer login</a>

@@ -18,7 +18,7 @@ def connect_to_db():
     return pymysql.connect(
         host="localhost",
         user="root",
-        password="TauZQS33@",
+        password="",
         database="biblioteca",
         cursorclass=pymysql.cursors.Cursor
     )
