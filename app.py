@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, send_from_directory
+from flask import Flask, render_template, request, redirect, session, send_from_directory, url_for
 import pymysql
 import os
 from flask_session import Session
@@ -18,11 +18,10 @@ def connect_to_db():
     return pymysql.connect(
         host="localhost",
         user="root",
-        password="",
+        password="1234567",
         database="biblioteca",
         cursorclass=pymysql.cursors.Cursor
     )
-
 
 @app.route('/')
 def index():
@@ -33,9 +32,16 @@ def index():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM livros")
     livros = cursor.fetchall()
-    conn.close()
-    return render_template('index.html', livros=livros)
 
+    # Pega os livros favoritos do usuário logado
+    usuario_id = session['usuario_id']
+    cursor.execute("SELECT livro_id FROM favoritos WHERE usuario_id = %s", (usuario_id,))
+    favoritos = cursor.fetchall()
+    livros_favoritos = [f[0] for f in favoritos]  # IDs dos livros favoritados
+
+    conn.close()
+
+    return render_template('index.html', livros=livros, livros_favoritos=livros_favoritos)
 
 @app.route('/adicionar', methods=['GET', 'POST'])
 def adicionar():
@@ -152,6 +158,50 @@ def registro():
         return redirect('/login')
 
     return render_template('login.html', login_ativo=False, formulario_titulo="Registrar")
+
+@app.route('/favoritar/<int:livro_id>', methods=['POST'])
+def favoritar(livro_id):
+    if 'usuario_id' not in session:
+        return redirect('/login')
+
+    usuario_id = session['usuario_id']
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM favoritos WHERE usuario_id = %s AND livro_id = %s", (usuario_id, livro_id))
+    favorito = cursor.fetchone()
+
+    if favorito:
+        cursor.execute("DELETE FROM favoritos WHERE usuario_id = %s AND livro_id = %s", (usuario_id, livro_id))
+    else:
+        cursor.execute("INSERT INTO favoritos (usuario_id, livro_id) VALUES (%s, %s)", (usuario_id, livro_id))
+
+    conn.commit()
+    conn.close()
+
+    
+    return redirect('/')
+
+@app.route('/favoritos')
+def ver_favoritos():
+    if 'usuario_id' not in session:
+        return redirect('/login')
+
+    usuario_id = session['usuario_id']
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    # Certifique-se de que a consulta está corretamente fazendo a junção entre 'livros' e 'favoritos' usando 'usuario_id' e 'livro_id'
+    cursor.execute("""
+        SELECT l.* FROM livros l
+        JOIN favoritos f ON l.id = f.livro_id
+        WHERE f.usuario_id = %s
+    """, (usuario_id,))
+    livros = cursor.fetchall()
+    conn.close()
+
+    # Verifica se há livros favoritados e passa para o template
+    return render_template('favoritos.html', livros=livros if livros else [])
 
 
 # Rota de logout

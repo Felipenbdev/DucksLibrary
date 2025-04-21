@@ -27,6 +27,7 @@
                             <p>Bem-vindo, {{ session['username'] }}!</p>
                         </div>
                         <a href="{{ url_for('adicionar') }}">Upar seu livro</a>
+                        <a href="{{ url_for('ver_favoritos') }}">Favoritos</a>
                         <form action="{{ url_for('logout') }}" method="get">
                             <button type="submit">Sair</button>
                         </form>
@@ -46,6 +47,15 @@
                         <div class="book-actions">
                             <a href="{{ url_for('ler_pdf', id=livro[0]) }}" target="_blank">📖 Ler</a>
                             <a href="{{ url_for('deletar', id=livro[0]) }}">🗑️ Deletar</a>
+                            {% if livro[0] in livros_favoritos %}
+                                <form action="{{ url_for('favoritar', livro_id=livro[0]) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="favorite-btn">💔 Remover Favorito</button>
+                                </form>
+                            {% else %}
+                                <form action="{{ url_for('favoritar', livro_id=livro[0]) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="favorite-btn">❤️ Favoritar</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

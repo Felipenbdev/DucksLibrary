@@ -1,0 +1,28 @@
+<!-- favoritos.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos</title>
+</head>
+<body>
+    <h1>Meus Livros Favoritos</h1>
+
+    {% if livros %}
+        <ul>
+            {% for livro in livros %}
+                <li>
+                    <h3>{{ livro[1] }}</h3> <!-- Título do livro -->
+                    <p>{{ livro[2] }}</p> <!-- Descrição do livro -->
+                    <a href="{{ url_for('ler_pdf', id=livro[0]) }}">Ler PDF</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Você ainda não favoritou nenhum livro.</p>
+    {% endif %}
+
+    <a href="/">Voltar para a página inicial</a>
+</body>
+</html>
