@@ -18,7 +18,7 @@ def connect_to_db():
     return pymysql.connect(
         host="localhost",
         user="root",
-        password="1234567",
+        password="TauZQS33@",
         database="biblioteca",
         cursorclass=pymysql.cursors.Cursor
     )
@@ -180,7 +180,7 @@ def favoritar(livro_id):
     conn.close()
 
     
-    return redirect('/')
+    return redirect(request.referrer or '/')
 
 @app.route('/favoritos')
 def ver_favoritos():

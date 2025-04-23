@@ -4,6 +4,34 @@ body {
     display: flex;
 }
 
+button,
+.favorite-btn,
+.user-menu a,
+.book-actions a,
+.book-form button,
+.form-box button {
+    padding: 0.4rem 0.8rem;
+    background-color: #cb9e66;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+button:hover,
+.favorite-btn:hover,
+.user-menu a:hover,
+.book-actions a:hover,
+.book-form button:hover,
+.form-box button:hover {
+    background-color: #a77e4f; /* tom mais escuro no hover */
+}
+
 .sidebar {
     position: fixed;
     top: 0;
@@ -91,6 +119,7 @@ body {
 .user-menu form {
     text-align: center;
     margin-top: 10px;
+    gap: 20px;
 }
 
 .user-menu form button {
@@ -113,7 +142,7 @@ body {
     text-align: center;
     margin: 0px auto;
     padding: 6px 5px;
-    background-color: #007BFF;
+    background-color: #cb9e66;
     color: white;
     border-radius: 6px;
     text-decoration: none;
@@ -126,7 +155,7 @@ body {
 }
 
 .user-name{
-    color: #0056b3;
+    color: #cb9e66;
     text-align: center;
     font-weight: bold;
     word-wrap: break-word;
@@ -204,6 +233,18 @@ body {
 
 .book-actions a:hover {
     background-color: #cb9e66;
+}
+
+.favorite-btn{
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
+    background-color: #cb9e66;
+    color: white;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 /* ----------------------------- */

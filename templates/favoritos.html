@@ -1,28 +1,76 @@
 <!-- favoritos.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favoritos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <h1>Meus Livros Favoritos</h1>
 
-    {% if livros %}
-        <ul>
-            {% for livro in livros %}
-                <li>
-                    <h3>{{ livro[1] }}</h3> <!-- Título do livro -->
-                    <p>{{ livro[2] }}</p> <!-- Descrição do livro -->
-                    <a href="{{ url_for('ler_pdf', id=livro[0]) }}">Ler PDF</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Você ainda não favoritou nenhum livro.</p>
-    {% endif %}
+    <div class="sidebar">
+        <div class="site-name">Ducks Library</div>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do site">
+        </div>
+    </div>
 
-    <a href="/">Voltar para a página inicial</a>
+    <div class="main-content">
+        <header class="top-bar">
+            <div class="news-bar">Meus Livros Favoritos ❤️</div>
+            <div class="top-right">
+                <div class="user-icon" onclick="toggleMenu()">
+                    <img src="{{ url_for('static', filename='icon.png') }}" alt="iconImg">
+                </div>
+                <div class="user-menu" id="userMenu">
+                    {% if session['usuario_id'] %}
+                    <div class="user-name" id="userName">
+                        <p>Bem-vindo, {{ session['username'] }}!</p>
+                    </div>
+                    <a href="{{ url_for('adicionar') }}">Upar seu livro</a>
+                    <a href="{{ url_for('index') }}">Tela Inicial</a>
+                    <form action="{{ url_for('logout') }}" method="get">
+                        <button type="submit">Sair</button>
+                    </form>
+                    {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+        <main class="book-list">
+            <div class="book-grid">
+
+                {% if livros %}
+                    {% for livro in livros %}
+                    <div class="book-card">
+                        <h3>{{ livro[1] }}</h3> <!-- Título do livro -->
+                        <p>{{ livro[2] }}</p> <!-- Descrição do livro -->
+                        <div class="book-actions">
+                            <a href="{{ url_for('ler_pdf', id=livro[0]) }}" target="_blank">📖 Ler</a>
+                                <form action="{{ url_for('favoritar', livro_id=livro[0]) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="favorite-btn">💔 Remover Favorito</button>
+                                </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <p>Você ainda não favoritou nenhum livro.</p>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer class="footer">Ducks Code - Todos os direitos reservados</footer>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("userMenu").classList.toggle("show");
+        }
+    </script>
 </body>
+
 </html>
