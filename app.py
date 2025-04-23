@@ -18,7 +18,7 @@ def connect_to_db():
     return pymysql.connect(
         host="localhost",
         user="root",
-        password="TauZQS33@",
+        password="",
         database="biblioteca",
         cursorclass=pymysql.cursors.Cursor
     )
@@ -47,6 +47,9 @@ def index():
 def adicionar():
     if 'usuario_id' not in session:
         return redirect('/login')
+    
+    if not session.get('is_admin', False):  
+        return redirect('/')
 
     if request.method == 'POST':
         titulo = request.form['titulo']
@@ -76,6 +79,9 @@ def adicionar():
 def deletar(id):
     if 'usuario_id' not in session:
         return redirect('/login')
+    
+    if not session.get('is_admin', False): 
+        return redirect('/')
 
     conn = connect_to_db()
     cursor = conn.cursor()
@@ -123,6 +129,7 @@ def login():
         if usuario:
             session['usuario_id'] = usuario[0]
             session['username'] = usuario[1]
+            session['is_admin'] = usuario[4]
             return redirect('/')
         else:
             return render_template('login.html', erro="Usuário ou senha inválidos", login_ativo=True, formulario_titulo="Login")
