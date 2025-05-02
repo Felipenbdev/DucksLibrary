@@ -32,9 +32,11 @@
                         {% endif %}
 
                         <a href="{{ url_for('ver_favoritos') }}">Favoritos</a>
+                        <a href="{{ url_for('deletarUsuario', id=session['usuario_id']) }}" onclick="return confirmarExclusao()">Deletar conta</a>
                         <form action="{{ url_for('logout') }}" method="get">
                             <button type="submit">Sair</button>
                         </form>
+                        
                     {% else %}
                         <a href="{{ url_for('login') }}">Login</a>
                     {% endif %}
@@ -77,6 +79,10 @@
         function toggleMenu() {
             document.getElementById("userMenu").classList.toggle("show");
         }
+        function confirmarExclusao() {
+            return confirm("Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita.");
+        }
+        
     </script>
 
 </body>

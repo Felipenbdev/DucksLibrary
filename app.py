@@ -5,7 +5,7 @@ from flask_session import Session
 
 app = Flask(__name__)
 
-# Configurações da sessão
+
 app.config['SECRET_KEY'] = 'chave-super-secreta'
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
@@ -18,7 +18,7 @@ def connect_to_db():
     return pymysql.connect(
         host="localhost",
         user="root",
-        password="",
+        password="1234567",
         database="biblioteca",
         cursorclass=pymysql.cursors.Cursor
     )
@@ -33,11 +33,11 @@ def index():
     cursor.execute("SELECT * FROM livros")
     livros = cursor.fetchall()
 
-    # Pega os livros favoritos do usuário logado
+    
     usuario_id = session['usuario_id']
     cursor.execute("SELECT livro_id FROM favoritos WHERE usuario_id = %s", (usuario_id,))
     favoritos = cursor.fetchall()
-    livros_favoritos = [f[0] for f in favoritos]  # IDs dos livros favoritados
+    livros_favoritos = [f[0] for f in favoritos]  
 
     conn.close()
 
@@ -98,6 +98,20 @@ def deletar(id):
 
     return redirect('/')
 
+@app.route('/deletar_usuario/<int:id>', methods = ['GET'])
+def deletarUsuario(id):
+    if 'usuario_id' not in session:
+        return redirect('/login')
+    
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM usuarios WHERE id = %s", (id,) )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/login")
 
 @app.route('/livro/<int:id>')
 def ler_pdf(id):
@@ -144,7 +158,6 @@ def registro():
         email = request.form['email']
         senha = request.form['senha']
 
-        # Verifica se o usuário já existe
         conn = connect_to_db()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM usuarios WHERE username = %s", (username,))
@@ -153,7 +166,7 @@ def registro():
         if usuario_existente:
             return render_template('login.html', erro="Nome de usuário já existe.", login_ativo=False, formulario_titulo="Registrar")
 
-        # Adiciona o novo usuário no banco de dados
+        
         cursor.execute("""
             INSERT INTO usuarios (username, email, senha) 
             VALUES (%s, %s, %s)
@@ -198,7 +211,6 @@ def ver_favoritos():
     conn = connect_to_db()
     cursor = conn.cursor()
 
-    # Certifique-se de que a consulta está corretamente fazendo a junção entre 'livros' e 'favoritos' usando 'usuario_id' e 'livro_id'
     cursor.execute("""
         SELECT l.* FROM livros l
         JOIN favoritos f ON l.id = f.livro_id
@@ -207,11 +219,9 @@ def ver_favoritos():
     livros = cursor.fetchall()
     conn.close()
 
-    # Verifica se há livros favoritados e passa para o template
     return render_template('favoritos.html', livros=livros if livros else [])
 
 
-# Rota de logout
 @app.route('/logout')
 def logout():
     session.clear()
